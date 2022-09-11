@@ -1,73 +1,61 @@
 import './index.css';
 import { useState, useEffect } from "react";
 import React from "react";
+import {userIDS, userStats} from "./User"
+import { MatchHistoryIDS } from "./MatchHistory"
 
 function Main(){
     const space = "%20"
-    const riotKey = 'RGAPI-0087df1a-e82b-4267-92e5-20d7dabf042f'
-
+    const riotKey = 'RGAPI-3f833e0f-6a35-4a4f-9fa2-6be22e71c3e1'
     const riotBase = 'https://na1.api.riotgames.com'
-    //matches
-    const getMatchID = '/tft/match/v1/matches/by-puuid/{puuid}/ids'
-    const getMatch =  '/tft/match/v1/matches/{matchId}'
+    const riotBaseMatchHistory = 'https://americas.api.riotgames.com'
 
-    var response = null
+    let response = null
     const [query, setQuery] = useState('')
-
-    const [IDLink, setIDLink] = useState('')
-    const [user, updateUser] = useState({
-        accountId: '',
-        id: '',
-        name: '',
-        profileIconId: 0,
-        puuid: '',
-        revisionDate: 0,
-        summonerLevel: 0,
-    })
-
-    const [MatchIDLink, setMatchIDLink] = useState('')
-    const [Match, setMatch] = useState('')
 
     
 
     async function submit(){
+        const newQuery = query.replace(/ /, space)
+        let IDLink = `${riotBase}/tft/summoner/v1/summoners/by-name/${newQuery}?api_key=${riotKey}`
+        console.log(IDLink)
         response = await fetch(IDLink)
         response = await response.json()
-        updateUser({
-            accountId: response.accountId,
-            id: response.id,
-            name: response.name,
-            profileIconId: response.profileIconId,
-            puuid: response.puuid,
-            revisionDate: response.revisionDate,
-            summonerLevel: response.summonerLevel,
-        })        
+        console.log(response)
+        
+        for(let i = 0; i < Object.keys(response).length; i++){
+            userIDS[`${Object.keys(response)[i]}`] = Object.values(response)[i]
+        }
+
+        let summonerStatsLink = `${riotBase}/tft/league/v1/entries/by-summoner/${response.id}?api_key=${riotKey}`
+        response = await fetch(summonerStatsLink)
+        response = await response.json()
+
+        for(let i = 0; i < Object.keys(response[0]).length; i++){
+            userStats[`${Object.keys(response[0])[i]}`] = Object.values(response[0])[i]
+        }
+        updateMatchHistory()
 
     }
 
-    useEffect(() => {
-        console.log('test')
-        const newQuery = query.replace(/ /, space)
-        setIDLink(`${riotBase}/tft/summoner/v1/summoners/by-name/${newQuery}?api_key=${riotKey}`)
+    async function updateMatchHistory(){
 
-        if(response != null){
-            console.log('yes')
-            updateUser({
-                accountId: response.accountId,
-                id: response.id,
-                name: response.name,
-                profileIconId: response.profileIconId,
-                puuid: response.puuid,
-                revisionDate: response.revisionDate,
-                summonerLevel: response.summonerLevel,
-            })
-        if(user.puuid != null){
-            setMatchIDLink(`${riotBase}/tft/match/v1/matches/by-puuid/${user.puuid}/ids?api_key=${riotKey}`)
-        }
+        let matchIDsLink = `${riotBaseMatchHistory}/tft/match/v1/matches/by-puuid/${userIDS.puuid}/ids?api_key=${riotKey}`
+        response = await fetch(matchIDsLink);
+        response = await response.json()
+        for(let i = 0; i < response.length; i++){
+            MatchHistoryIDS[i] = response[i]
         }
 
+        for(let i = 0; i < MatchHistoryIDS.length; i++){
+            let matchLink = `${riotBaseMatchHistory}/tft/match/v1/matches/${MatchHistoryIDS[i]}?api_key=${riotKey}`
+            console.log(matchLink)
+        }
+    }
 
-    })
+    // useEffect(() => {
+
+    // })
 
     return(
         <main>
@@ -85,15 +73,9 @@ function Main(){
                 onClick={() => submit() } >
                 Submit
             </button>
-            {/* Fix this lol */}
-            {/* User Info */}
+
             <div>
-               <button onClick={() => {
-                console.log(user)
-               }}> print </button> 
-            </div>
-            <div>
-                {MatchIDLink}
+                {}
             </div>
 
         </main>
