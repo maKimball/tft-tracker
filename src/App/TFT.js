@@ -137,7 +137,7 @@ function Main(){
                         <Button style = {{width: 200}}className="btn btn-default" type="button" onClick={() => submit()}> Search </Button>
                 </span>
             </div>
-                    <div style ={{backgroundColor: 'orange', padding: '50px'}}>
+                    <div style ={{backgroundColor: '#fe938c', padding: '50px'}}>
                     {isMatchHistory?
                     <Card> 
                         <Card.Body>
@@ -160,14 +160,17 @@ function Main(){
             </div>
 
 
-            <div>
+            <div className='matchhistory'>
                 {MatchHistory.map(function(index, key) {
                     // console.log(Object.values(index)[2])
                     return (
                         <div key={key}>
-                            <h1 key={key+1}>Game {key +1}  </h1>
-                            <h4 key={key+2}>{index.gameType = "standard"? "ranked" : "other"} {Math.round(index.gameLength/60)}:
-                            {Math.round(index.gameLength%60)<10 ? `0${Math.round(index.gameLength%60)}`: Math.round(index.gameLength%60) }</h4>
+                            <div className='heading'> 
+                                <h1 key={key+1}>Game {key +1}  </h1>
+                                <h4 key={key+2}>{index.gameType = "standard"? "ranked" : "other"} {Math.round(index.gameLength/60)}:
+                                {Math.round(index.gameLength%60)<10 ? `0${Math.round(index.gameLength%60)}`: Math.round(index.gameLength%60) }</h4>
+                            </div>
+                            
                                 <Table key={key+3}><tbody key={key+4}> 
                                     <tr key={key+5}>
                                         <th key={key+6}>Placement </th>

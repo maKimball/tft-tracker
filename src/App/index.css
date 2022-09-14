@@ -1,28 +1,44 @@
-html{
-    background-color: yellow;
+main{
+    background-color: #4281a4;
+}
+.button{
+    background-color: #4281a4;
 }
 
 .form-control{
     margin-right: 20px;
 }
 .input-group{
-    background-color: lightblue;
+    background-color: #4281a4;
     display: flex;
     padding: 50px;
     padding-left: 20%;
     padding-right: 20%;
     width: 100%;
 }
-.card {
-    background-color: aliceblue;
-}
+
 .card-body{
-    background-color: palegreen;
+    outline: 2px solid white;
+    background-color: #e6b89c;
 }
 .table{
-    outline: 1px solid black;
-    /* margin-left: 20px;
-    margin-right: 20px;
-    width: 100%; */
+    outline: 2px solid white;
+    width: 90%;
+    height: 10px;
+    font-size: 10px;
     text-align: center;
+    margin: auto;
+    background-color: #ead2ac;
+}
+
+.matchhistory{
+    background-color: #e6b89c;
+}
+
+.heading{
+    color: aliceblue;
+    background-color: #4281a4;
+    padding: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
