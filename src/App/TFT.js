@@ -165,6 +165,7 @@ function Main(){
                 })} */}
             </div>
 
+                    </tbody> </Table>
             <button onClick={() => {
                 console.log(userIDS)
                 console.log(MatchHistory)
