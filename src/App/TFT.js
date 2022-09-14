@@ -28,8 +28,6 @@ function Main(){
 
     })
 
-
-
     async function submit(){
         updateMatchHistory(false)
         for (let i in Matches) {
@@ -101,13 +99,15 @@ function Main(){
             for(let i = 0; i < 8; i++){
                 playerData.push(
                     {
-                        name: playerNames[i],
                         placement: currentMatch.info.participants[i].placement,
+                        name: playerNames[i],
+                        lastRound: currentMatch.info.participants[i].last_round,
                         level: currentMatch.info.participants[i].level,
                         augments: currentMatch.info.participants[i].augments,
-                        units: currentMatch.info.participants[i].units,
                         traits: currentMatch.info.participants[i].traits,
-                        lastRound: currentMatch.info.participants[i].last_round
+                        units: currentMatch.info.participants[i].units,
+                        
+                        
                     }
                 )
             }
@@ -126,6 +126,7 @@ function Main(){
 
     return(
         <main>
+            <div>
             <div className="input-group">
                 <input type="text" placeholder="Summoner Name" className="form-control"
                 onChange={e => {
@@ -153,24 +154,105 @@ function Main(){
                         }
                 </div>
                 
-                
-            
-            <div>
-                <h1> Match History </h1>
-                {MatchHistory.gameLength}
-                {/* {MatchHistory.map(function(index, key) {
-                    return(
-                        <div key={key}> {MatchHistory[index]} </div>
-                    )
-                })} */}
+                <div>
+                    {isMatchHistory?<h1>  </h1>: ""}
+                </div>
             </div>
 
-                    </tbody> </Table>
-            <button onClick={() => {
-                console.log(userIDS)
-                console.log(MatchHistory)
-            }}/>
 
+            <div>
+                {MatchHistory.map(function(index, key) {
+                    // console.log(Object.values(index)[2])
+                    return (
+                        <div key={key}>
+                            <h1 key={key+1}>Game {key +1}  </h1>
+                            <h4 key={key+2}>{index.gameType = "standard"? "ranked" : "other"} {Math.round(index.gameLength/60)}:
+                            {Math.round(index.gameLength%60)<10 ? `0${Math.round(index.gameLength%60)}`: Math.round(index.gameLength%60) }</h4>
+                                <Table key={key+3}><tbody key={key+4}> 
+                                    <tr key={key+5}>
+                                        <th key={key+6}>Placement </th>
+                                        <th key={key +7}>Summoner Name </th>
+                                        <th key={key +8}>Last Round </th>
+                                        <th key={key +9}>Level </th>
+                                        <th key={key +10}>Augments </th>
+                                        <th key={key +11}>Traits </th>
+                                        <th key={key +12}>Units </th>
+                                    </tr>
+                                    {Object.values(index)[2].map(function(index,key){
+                                        return(
+                                            <tr key={key}>
+                                                {Object.values(index).map(function(index,key){
+                                                    if(key < 4){
+                                                        return(
+                                                            <td key={key}> {index} </td>
+                                                        )
+                                                    } else if(key === 4){
+                                                        //augments
+                                                        return(
+                                                            <td key={key}> 
+                                                                <Table key={key}>
+                                                                    <tbody key={key}>
+                                                                        {Object.keys(index).map(function(newIndex, key){
+                                                                            return(
+                                                                                <tr key={key}> {index[key]} </tr>
+                                                                            )
+                                                                        })}
+                                                                    </tbody>
+                                                                </Table> 
+                                                            </td>
+                                                        )
+                                                    } else if(key === 5){
+                                                        //traits
+                                                        return(
+                                                            <td key={key}>  
+                                                                <Table key={key}>
+                                                                    <tbody key={key}>
+                                                                        <th key={key}> Trait Name</th>
+                                                                        <th key={key+1}> # </th>
+                                                                        {index.map(function(index, key){
+                                                                            return(
+                                                                                <tr key={key}> 
+                                                                                    <td key={key}> {Object.values(index)[0]} </td>
+                                                                                    <td key={`key${key}`}> {Object.values(index)[1]} </td>
+                                                                                </tr>
+                                                                            )
+                                                                        })}
+                                                                    </tbody>
+                                                                </Table> 
+                                                            </td>
+                                                            
+                                                        )
+                                                    } else {
+                                                        //units
+                                                        return(
+                                                            <td key={key}>  
+                                                                <Table key={key}>
+                                                                    <tbody key={key}>
+                                                                        <th key={key}> Unit </th>
+                                                                        <th key={key+1}> Star Level </th>
+                                                                        {index.map(function(index, key){
+                                                                            return(
+                                                                                <tr key={key}> 
+                                                                                    <td key={key}> {Object.values(index)[0]} </td>
+                                                                                    <td key={`key${key}`}> {Object.values(index)[5]} </td>
+                                                                                </tr>
+                                                                            )
+                                                                        })}
+                                                                    </tbody>
+                                                                </Table> 
+                                                            </td>
+                                                            
+                                                        )
+                                                    }
+                                                })}
+                                            </tr>
+                                        )
+                                    })}
+                                </tbody> </Table>
+                        </div>
+                    )
+                })}       
+            </div>
         </main>
     )
 }
